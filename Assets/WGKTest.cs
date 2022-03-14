@@ -35,6 +35,8 @@ public class WGKTest : MonoBehaviour {
     float keyLength;
     float deltaNormal;
     float deltaLocaton;
+    float numKeysOnLongestLine = 1;
+    float delta;
 
 
 
@@ -187,7 +189,7 @@ public class WGKTest : MonoBehaviour {
             point = Quaternion.Euler(-transform.localRotation.eulerAngles.z, -transform.localRotation.eulerAngles.y, -transform.localRotation.eulerAngles.x + 90) * point;
             //print("THIS IS A transformed POINT: " + point);
             //LR.SetPosition(i, point);
-            pointsList.Add(new Vector2((point[0] + halfLength) * 10 / length, (point[2] + halfWidth) * 10 / length)); // adding magnitudes, such that lower left corner of "coordinate system" is at (0/0) and not middle point at (0/0)
+            pointsList.Add(new Vector2((point[0] + halfLength) / length, (point[2] + halfWidth) / length)); // adding magnitudes, such that lower left corner of "coordinate system" is at (0/0) and not middle point at (0/0)
             pointsListTest.Add(point);
 
         }
@@ -213,6 +215,13 @@ public class WGKTest : MonoBehaviour {
             keyboardSet.Add("yxcvbnm");
         }
 
+        for (int i = 0; i < keyboardSet.Count; i++) {
+            if (keyboardSet[i].Length > numKeysOnLongestLine) {
+                numKeysOnLongestLine = keyboardSet[i].Length;
+            }
+        }
+        delta = 1 / numKeysOnLongestLine;   // is also the width of a key
+
         int y = keyboardSet.Count - 1;
         foreach (string s in keyboardSet) {
             int x = 0;
@@ -232,7 +241,7 @@ public class WGKTest : MonoBehaviour {
 
     string calcBestWords(List<Vector2> userInputPoints, int steps) {
         List<Vector2> inputPoints = getWordGraphStepPoint(userInputPoints, steps);
-        List<Vector2> normalizedInputPoints = normalize(inputPoints, 2);
+        List<Vector2> normalizedInputPoints = normalize(inputPoints, 1);
 
         //List<Vector2> inputPoints = new List<Vector2>();
         //foreach (var point in inputPoints2) {
@@ -279,10 +288,10 @@ public class WGKTest : MonoBehaviour {
         foreach (string word in wordList) {
             float shapeCost = normalizedCostList[word];
             float locationCost = costList[word];
-            float shapeProb = 1/(deltaNormal*Mathf.Sqrt(2*Mathf.PI)) * Mathf.Exp((float)(-0.5 * Mathf.Pow(shapeCost / deltaNormal, 2)));
-            float locationProb = 1/(deltaLocaton*Mathf.Sqrt(2*Mathf.PI)) * Mathf.Exp((float)(-0.5 * Mathf.Pow(locationCost / deltaLocaton, 2)));
-            print("LOCCOST: " + locationCost);
-            print("LOCPROB: " + locationProb);
+            float shapeProb = 1/(delta*Mathf.Sqrt(2*Mathf.PI)) * Mathf.Exp((float)(-0.5 * Mathf.Pow(shapeCost / delta, 2)));
+            float locationProb = 1/(delta*Mathf.Sqrt(2*Mathf.PI)) * Mathf.Exp((float)(-0.5 * Mathf.Pow(locationCost / delta, 2)));
+            ///print("LOCCOST: " + locationCost);
+            ///print("LOCPROB: " + locationProb);
             tempShapeCosts.Add(shapeProb);
             tempLocationCosts.Add(locationProb);
         }
@@ -291,9 +300,9 @@ public class WGKTest : MonoBehaviour {
         float sum2 = 0;
         for (int i = 0; i < tempShapeCosts.Count; i++) {
             sum += tempShapeCosts[i];
-            print("sum1= " + sum);
+            ///print("sum1= " + sum);
             sum2 += tempLocationCosts[i];
-            print("sum2= " + sum2);
+            ///print("sum2= " + sum2);
         }
         for (int i = 0; i < tempShapeCosts.Count; i++) {
             tempShapeCosts[i] /= sum;
@@ -304,7 +313,7 @@ public class WGKTest : MonoBehaviour {
         sum = 0;
         for (int i = 0; i < tempShapeCosts.Count; i++) {
             sum += tempShapeCosts[i] * tempLocationCosts[i];
-            print("sum3= " + sum);
+            ///print("sum3= " + sum);
         }
         for (int i = 0; i < tempShapeCosts.Count; i++) {
             tempCosts2.Add(tempShapeCosts[i] * tempLocationCosts[i] / sum);
@@ -373,9 +382,10 @@ public class WGKTest : MonoBehaviour {
                 }
             }
             ///print("COOOOOOOOOST: " + word.Key + " : " + cost);
-            //if (cost < 5) {
-            costList.Add(word.Key, cost);
-            //}
+            if (cost < 2) {
+                costList.Add(word.Key, cost);
+                //print("COOOOOOOOOST: " + word.Key + " : " + cost);
+            }
             deltaLocaton = 1;
         }
         return costList;
@@ -398,9 +408,11 @@ public class WGKTest : MonoBehaviour {
             if (word.Key == "ice") {
                 print("ICECOST: " + cost + " : " + (deltaNormal*2));
             }
-            if (cost < deltaNormal * 2) {
+            if (cost < delta * 4) {
                 normalizedCostList.Add(word.Key, cost);
+                ///print("NORMCOST: " + word.Key + " : " + cost);
             }
+            
         }
 
         return normalizedCostList;

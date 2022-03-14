@@ -8,6 +8,7 @@ class wordSokgraphGenerator:
     def __init__(self, layout):
         self.layout = layout
         self.keyboardSet = []
+        self.keyboardLength = 1
         if layout == "qwertz":
             self.keyboardSet.append("qwertzuiop")
             self.keyboardSet.append("asdfghjkl")
@@ -15,8 +16,11 @@ class wordSokgraphGenerator:
         else:
             pass # make other layouts
 
-
         self.testWords = ["test", "hello", "bye", "legendary", "official", "dark", "bright", "computer", "school", "university"]
+
+        for i in range(0, len(self.keyboardSet)):
+            if len(self.keyboardSet[i]) > self.keyboardLength:
+                self.keyboardLength = len(self.keyboardSet[i])
 
         
     # returns a list of points for the given word (points where the "pressed" letters lie)
@@ -60,8 +64,8 @@ class wordSokgraphGenerator:
             stepPoints = []
             currPos = letterPoints[0]
             for i in range(0, steps):
-                stepPoints.append(currPos)
-            stepPointsNormalized = self.normalize(stepPoints, 2)
+                stepPoints.append((currPos + np.array([0.5,0.5]))/self.keyboardLength)
+            stepPointsNormalized = self.normalize(stepPoints, 1)
             return stepPoints, stepPointsNormalized
         
         stepSize = length / (steps - 1)
@@ -77,7 +81,7 @@ class wordSokgraphGenerator:
         
         stepPoints = []
         
-        stepPoints.append(currPos)
+        stepPoints.append((currPos + np.array([0.5,0.5]))/self.keyboardLength)
         
         while numSteps < steps:
             distVec = distVecs[currDistVecNum]
@@ -88,7 +92,7 @@ class wordSokgraphGenerator:
                     numSteps += 1
                     currPos = currPos + distVec / distVecLength * currStep
                     distVecs[currDistVecNum] = letterPoints[currPosNum + 1] - currPos # calculate new distance vector
-                    stepPoints.append(currPos)
+                    stepPoints.append((currPos + np.array([0.5,0.5]))/self.keyboardLength)
                     #print(currPos)
                     currStep = stepSize
                 else:
@@ -102,7 +106,7 @@ class wordSokgraphGenerator:
                 numPointsOnLine = int(distVecLength / stepSize + 0.00001)
                 numSteps += numPointsOnLine
                 for i in range(0, numPointsOnLine):
-                    stepPoints.append(currPos + (i+1) * (distVec / distVecLength * stepSize))
+                    stepPoints.append(((currPos + (i+1) * (distVec / distVecLength * stepSize)) + np.array([0.5,0.5]))/self.keyboardLength)
                     #print(currPos + (i+1) * (distVec / distVecLength * stepSize))
                 
                 if distVecLength - numPointsOnLine * stepSize > 0.00001:
