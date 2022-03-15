@@ -203,7 +203,7 @@ public class WGKTest : MonoBehaviour {
         }
 
         calcBestWords(pointsList, 20);
-        print("WORKED UNTIIL HERE :D");
+        //print("WORKED UNTIIL HERE :D");
         print("TIME NEEDED: " + (Time.realtimeSinceStartup-t));
     }
 
@@ -391,7 +391,7 @@ public class WGKTest : MonoBehaviour {
             ///print("COOOOOOOOOST: " + word.Key + " : " + cost);
             if (cost < 2) {
                 costList.Add(word.Key, cost);
-                print("COOOOOOOOOST: " + word.Key + " : " + cost);
+//                print("COOOOOOOOOST: " + word.Key + " : " + cost);
             }
             deltaLocaton = 1;
         }
@@ -413,7 +413,7 @@ public class WGKTest : MonoBehaviour {
 
             //print("COSTS: " + word.Key + " : " + cost);
             if (word.Key == "ice") {
-                print("ICECOST: " + cost + " : " + (deltaNormal*2));
+//                print("ICECOST: " + cost + " : " + (deltaNormal*2));
             }
             if (cost < delta * 4) {
                 normalizedCostList.Add(word.Key, cost);
@@ -426,7 +426,7 @@ public class WGKTest : MonoBehaviour {
     }
 
     List<Vector2> getWordGraphStepPoint(List<Vector2> points, int steps) {
-        print("HOW MANY POITNS? " + points.Count);
+//        print("HOW MANY POITNS? " + points.Count);
         double length = getLengthByPoints(points);
         List<Vector2> stepPoints = new List<Vector2>();
         Vector2 currPos = points[0];
@@ -522,7 +522,7 @@ public class WGKTest : MonoBehaviour {
         float s;
         if (Mathf.Max(boundingBoxSize[0], boundingBoxSize[1]) != 0) {
             s = length / Mathf.Max(boundingBoxSize[0], boundingBoxSize[1]);
-            print("S = " + s);
+//            print("S = " + s);
         }
         else {
             s = 1;
