@@ -189,7 +189,7 @@ public class WGKTest : MonoBehaviour {
             point = Quaternion.Euler(-transform.localRotation.eulerAngles.z, -transform.localRotation.eulerAngles.y, -transform.localRotation.eulerAngles.x + 90) * point;
             //print("THIS IS A transformed POINT: " + point);
             //LR.SetPosition(i, point);
-            pointsList.Add(new Vector2((point[0] + halfLength) / length, (point[2] + halfWidth) / length)); // adding magnitudes, such that lower left corner of "coordinate system" is at (0/0) and not middle point at (0/0)
+            pointsList.Add(new Vector2((point[0] + halfLength) / length + 0.05f, (point[2] + halfWidth) / length + 0.05f)); // adding magnitudes, such that lower left corner of "coordinate system" is at (0/0) and not middle point at (0/0)
             pointsListTest.Add(point);
 
         }
@@ -224,11 +224,17 @@ public class WGKTest : MonoBehaviour {
 
         int y = keyboardSet.Count - 1;
         foreach (string s in keyboardSet) {
+            float t = 0;
             int x = 0;
+            if (y == 1) {
+                t = 0.025f * vec1.magnitude;
+            } else if (y == 0) {
+                t = 0.075f * vec1.magnitude;
+            }
             foreach (var letter in s) {
                 GameObject specificKey = Instantiate(Key) as GameObject;
                 print("VEC1.x " + vec2);
-                specificKey.transform.position = new Vector3(transform.position.x + (vec1.x / 10)*(4.5f-x), transform.position.y + 0.005f, transform.position.z - (vec2.z/3)*(y-1));
+                specificKey.transform.position = new Vector3(transform.position.x + (vec1.x / 10)*(4.5f-x) + t, transform.position.y + 0.005f, transform.position.z - (vec2.z/3)*(y-1));
                 specificKey.transform.Find("Canvas").Find("Text").GetComponent<Text>().text = letter.ToString();
                 specificKey.transform.SetParent(this.transform);
                 specificKey.transform.localScale -= (new Vector3(specificKey.transform.localScale.x, specificKey.transform.localScale.y, specificKey.transform.localScale.z)) * 0.5f;
@@ -329,7 +335,7 @@ public class WGKTest : MonoBehaviour {
         var sortedDict = from entry in finalCosts orderby entry.Value ascending select entry;
 
         foreach (var word in sortedDict) {
-            print(word.Key + " : " + word.Value);
+            print("RESULT: " + word.Key + " : " + word.Value);
         }
         
         return "hello";
@@ -343,7 +349,7 @@ public class WGKTest : MonoBehaviour {
         float d2;
         
         float[] arrD = new float[steps];
-        float keyRadius = vec1.magnitude/20;
+        float keyRadius = 0.05f * 2; // length of keyboard is set to 1
 
         foreach (var word in locationWordsPointDict) {
             i = 0;
@@ -357,6 +363,7 @@ public class WGKTest : MonoBehaviour {
                     arrD[j] = (p - inputPoints[j]).magnitude;
                 }
                 d += Mathf.Max(arrD.Min() - keyRadius, 0);
+                //print(word.Key + ": D = " + arrD.Min() + " - " + keyRadius);
             }
 
             
@@ -384,7 +391,7 @@ public class WGKTest : MonoBehaviour {
             ///print("COOOOOOOOOST: " + word.Key + " : " + cost);
             if (cost < 2) {
                 costList.Add(word.Key, cost);
-                //print("COOOOOOOOOST: " + word.Key + " : " + cost);
+                print("COOOOOOOOOST: " + word.Key + " : " + cost);
             }
             deltaLocaton = 1;
         }
