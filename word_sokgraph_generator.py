@@ -10,9 +10,11 @@ class wordSokgraphGenerator:
         self.keyboardSet = []
         self.keyboardLength = 1
         if layout == "qwertz":
-            self.keyboardSet.append("qwertzuiop")
-            self.keyboardSet.append("asdfghjkl")
+            self.keyboardSet.append("1234567890_-")
+            self.keyboardSet.append("qwertzuiopü")
+            self.keyboardSet.append("asdfghjklöä")
             self.keyboardSet.append("yxcvbnm")
+            self.keyboardSet.append(" ")
         else:
             pass # make other layouts
 
@@ -27,15 +29,19 @@ class wordSokgraphGenerator:
     def getPointsForWord(self, word):
         letterPos = {}
         for y in range(0, len(self.keyboardSet)):
-            if y == 0: # for the offset the different layers of the keyboard have
-                x = 0
-            elif y == 1:
-                x = 0.25
-            else:
+            x = 0
+            if y == 3: # for the offset the different layers of the keyboard have
+                x = 0.5
+            elif y == 2:
                 x = 0.75
+            elif y == 1:
+                x = 1.25
+
+            if len(self.keyboardSet) != 5:    # no numbers in top row (doesn't need the first shift to the right, can be reversed)
+                x -= 0.5
 
             for letter in self.keyboardSet[y]:
-                letterPos[letter] = np.array([x, 2-y])
+                letterPos[letter] = np.array([x, y])
                 x += 1
 
         points = []
@@ -187,7 +193,7 @@ def main():
     wsg = wordSokgraphGenerator(layout)
 
     start_time = time.time()
-    f = open("sokgraph_" + layout + "2.txt", "a")
+    f = open("sokgraph_" + layout + "3.txt", "a")
     #for k in range(0, 1000):
     for word in lexicon:
         graphPoints, graphPointsNormalized = wsg.getWordGraphStepPoint(word, 20)
