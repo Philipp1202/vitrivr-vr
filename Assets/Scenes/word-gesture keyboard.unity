@@ -363,6 +363,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31949e373264ef744a493d978b599f85, type: 3}
+--- !u!1 &45643352 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8604429250614414639, guid: df175ee4ebb2ca54da266e0b5fadb613,
+    type: 3}
+  m_PrefabInstance: {fileID: 163341155}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &52517650 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5921596288138976708, guid: b770fb34da7637e40b91487b27ab854e,
@@ -1300,6 +1306,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 786014440f7d8af48a18b6dc36caf4aa, type: 3}
+--- !u!1 &524950817 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8604429250614414639, guid: df175ee4ebb2ca54da266e0b5fadb613,
+    type: 3}
+  m_PrefabInstance: {fileID: 1020801192}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &533919760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2148511394370237564, guid: 31949e373264ef744a493d978b599f85,
@@ -1385,9 +1397,10 @@ MonoBehaviour:
       m_Action: Grab
       m_Flags: 0
     m_Flags: 0
-  uiClickAction: {fileID: 0}
-  bindingIndex: 0
-  uiLine: {fileID: 0}
+  uiClickAction: {fileID: 5762402034602797191, guid: fa1ea27f8e475394eb724e13fab25d5b,
+    type: 3}
+  bindingIndex: 3
+  uiLine: {fileID: 524950817}
 --- !u!135 &597544205
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2461,9 +2474,10 @@ MonoBehaviour:
       m_Action: Grab
       m_Flags: 0
     m_Flags: 0
-  uiClickAction: {fileID: 0}
-  bindingIndex: 0
-  uiLine: {fileID: 0}
+  uiClickAction: {fileID: 5762402034602797191, guid: fa1ea27f8e475394eb724e13fab25d5b,
+    type: 3}
+  bindingIndex: 4
+  uiLine: {fileID: 45643352}
 --- !u!135 &1072252915
 SphereCollider:
   m_ObjectHideFlags: 0
