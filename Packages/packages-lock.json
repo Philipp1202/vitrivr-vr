@@ -147,19 +147,19 @@
       "dependencies": {},
       "hash": "b5c2335720146358ae35a3ca25807140da33713d"
     },
-    "org.vitrivr.unityinterface.cineastapi": {
-      "version": "https://github.com/vitrivr/CineastUnityInterface.git#v0.0.2",
+    "dev.dres.unityclient": {
+      "version": "https://github.com/dres-dev/UnityClient.git#v1.1.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "a1ef472aa70f55ddb15a8b2701d965d046470ef7"
+      "hash": "a9573d03cf5ca51310fe3894dcd12a511663998e"
     },
-    "org.vitrivr.unityinterface.dresapi": {
-      "version": "https://github.com/dres-dev/UnityClient.git#v1.0.0",
+    "org.vitrivr.unityinterface.cineastapi": {
+      "version": "https://github.com/vitrivr/CineastUnityInterface.git#v0.0.4",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d9cfc9e7502b95572ea1a0a3c3285fc1d45c5091"
+      "hash": "1be8b38c79613b3cf539d4c229074c04c5ece173"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

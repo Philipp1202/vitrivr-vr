@@ -11,7 +11,9 @@ namespace VitrivrVR.Interaction.System
     public InputAction grab;
 
     public InputActionReference uiClickAction;
-    public int bindingIndex;
+    public int clickBindingIndex;
+    public InputActionReference uiPointAction;
+    public int pointBindingIndex;
     public GameObject uiLine;
 
     private readonly HashSet<Interactable> _interactables = new();
@@ -86,23 +88,29 @@ namespace VitrivrVR.Interaction.System
       }
     }
 
+    private static bool GetInteractable(Collider collider, out Interactable interactable)
+    {
+      // Check collider for interactable, then check attached rigidbody
+      return collider.TryGetComponent(out interactable) || collider.attachedRigidbody.TryGetComponent(out interactable);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-      if (!other.TryGetComponent<Interactable>(out var interactable)) return;
+      if (!GetInteractable(other, out var interactable)) return;
 
-      _interactables.Add(interactable);
+      if (!_interactables.Add(interactable)) return;
+
       interactable.OnHoverEnter(transform);
-
       UpdateUIPointer();
     }
 
     private void OnTriggerExit(Collider other)
     {
-      if (!other.TryGetComponent<Interactable>(out var interactable)) return;
+      if (!GetInteractable(other, out var interactable)) return;
 
-      _interactables.Remove(interactable);
+      if (!_interactables.Remove(interactable)) return;
+
       interactable.OnHoverExit(transform);
-
       UpdateUIPointer();
     }
 
@@ -115,10 +123,10 @@ namespace VitrivrVR.Interaction.System
 
     private void RemoveDisabledOrDestroyed()
     {
-      _interactables.Remove(null);
+      _interactables.RemoveWhere(interactable => interactable == null);
       _interactables.RemoveWhere(interactable => !interactable.gameObject.activeInHierarchy);
-      _grabbed?.Remove(null);
-      _interacting?.Remove(null);
+      _grabbed?.RemoveWhere(interactable => interactable == null);
+      _interacting?.RemoveWhere(interactable => interactable == null);
     }
 
     private void UpdateUIPointer()
@@ -128,12 +136,14 @@ namespace VitrivrVR.Interaction.System
       switch (shouldBeDisabled)
       {
         case true when _uiPointerActive:
-          uiClickAction.action.ApplyBindingOverride(bindingIndex, string.Empty);
+          uiClickAction.action.ApplyBindingOverride(clickBindingIndex, string.Empty);
+          uiPointAction.action.ApplyBindingOverride(pointBindingIndex, string.Empty);
           _uiPointerActive = false;
           uiLine.SetActive(false);
           break;
         case false when !_uiPointerActive:
-          uiClickAction.action.RemoveBindingOverride(bindingIndex);
+          uiClickAction.action.RemoveBindingOverride(clickBindingIndex);
+          uiPointAction.action.RemoveBindingOverride(pointBindingIndex);
           _uiPointerActive = true;
           uiLine.SetActive(true);
           break;
