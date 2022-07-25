@@ -101,7 +101,10 @@ namespace VitrivrVR.Input.Text
       InputKeyboardEvent('\t'.ToString());
     }
 
-
+    /// <summary>
+    /// Inputs the given text into the currently selected text input field and additionally inputs spaces.
+    /// </summary>
+    /// /// <param name="text">Text to input</param>
     public static void InputWord(string text)
     {
       var inputField = GetSelectedInputField();
@@ -133,7 +136,9 @@ namespace VitrivrVR.Input.Text
       textfieldLastInput[inputField.GetInstanceID()] = new KeyValuePair<string, int>(text, text.Length);
     }
 
-
+    /// <summary>
+    /// Deletes the last inputted word.
+    /// </summary>
     public static void DeleteWord()
     {
       var inputField = GetSelectedInputField();
