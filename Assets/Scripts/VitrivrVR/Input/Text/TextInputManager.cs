@@ -118,7 +118,7 @@ namespace VitrivrVR.Input.Text
 
       int noWhitespaceLength = textfieldLastInput[inputField.GetInstanceID()].Key.Trim().Length;
 
-      if (!(text.Trim().Length == 0) && ((text.Trim().Length > 1 && noWhitespaceLength > 0) || (text.Trim().Length == 1 && noWhitespaceLength > 1)) && inputField.caretPosition == inputField.text.Length) 
+      if (!(text.Trim().Length == 0) && ((text.Trim().Length > 1 && noWhitespaceLength > 0) || (text.Trim().Length == 1 && noWhitespaceLength > 1)) && inputField.caretPosition == inputField.text.Length && inputField.text.Length > 0) 
       {
         text = " " + text;
       }
