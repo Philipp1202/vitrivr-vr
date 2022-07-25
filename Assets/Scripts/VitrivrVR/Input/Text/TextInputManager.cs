@@ -2,6 +2,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 namespace VitrivrVR.Input.Text
 {
@@ -11,6 +12,7 @@ namespace VitrivrVR.Input.Text
   /// </summary>
   public static class TextInputManager
   {
+    public static Dictionary<int, KeyValuePair<string,int>> textfieldLastInput = new Dictionary<int, KeyValuePair<string, int>>();
     /// <summary>
     /// Inputs the given text into the currently selected text input field.
     /// </summary>
@@ -47,6 +49,7 @@ namespace VitrivrVR.Input.Text
 
       inputField.ProcessEvent(inputEvent);
       inputField.ForceLabelUpdate();
+      textfieldLastInput[inputField.GetInstanceID()] = new KeyValuePair<string, int>("", 1);
     }
 
     /// <summary>
@@ -96,6 +99,67 @@ namespace VitrivrVR.Input.Text
     public static void InputTabulator()
     {
       InputKeyboardEvent('\t'.ToString());
+    }
+
+
+    public static void InputWord(string text)
+    {
+      var inputField = GetSelectedInputField();
+
+      if (inputField == null)
+      {
+        return; // No text field selected, nothing to do
+      }
+
+      if (!textfieldLastInput.ContainsKey(inputField.GetInstanceID()))
+      {
+        textfieldLastInput[inputField.GetInstanceID()] = new KeyValuePair<string, int>("", 1);    
+      }
+
+      int noWhitespaceLength = textfieldLastInput[inputField.GetInstanceID()].Key.Trim().Length;
+
+      if (!(text.Trim().Length == 0) && ((text.Trim().Length > 1 && noWhitespaceLength > 0) || (text.Trim().Length == 1 && noWhitespaceLength > 1)) && inputField.caretPosition == inputField.text.Length) 
+      {
+        text = " " + text;
+      }
+
+      foreach (var keyEvent in text.Select(character => new Event {character = character}))
+      {
+        inputField.ProcessEvent(keyEvent);
+      }
+
+      inputField.ForceLabelUpdate();
+
+      textfieldLastInput[inputField.GetInstanceID()] = new KeyValuePair<string, int>(text, text.Length);
+    }
+
+
+    public static void DeleteWord()
+    {
+      var inputField = GetSelectedInputField();
+
+      if (inputField == null || !textfieldLastInput.ContainsKey(inputField.GetInstanceID()))
+      {
+        return; // No text field selected, nothing to do
+      }
+
+      int neededBackspaces = textfieldLastInput[inputField.GetInstanceID()].Key.Trim().Length;
+      if (neededBackspaces == 0 || inputField.caretPosition != inputField.text.Length) 
+      {
+        neededBackspaces = 1;
+      }
+      int textLength = inputField.text.Length;
+      for (int i = 0; i < neededBackspaces; i++)
+      {
+        inputField.ProcessEvent(Event.KeyboardEvent("backspace"));
+        if (textLength - neededBackspaces >= inputField.text.Length)
+        { 
+          break;
+        }
+      }
+      inputField.ForceLabelUpdate();
+      textfieldLastInput[inputField.GetInstanceID()] = new KeyValuePair<string, int>("", 1);
+      Debug.Log("NEEDEDBACKSPACES: " + neededBackspaces);
     }
 
     /// <summary>

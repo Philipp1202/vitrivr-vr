@@ -16,10 +16,22 @@ namespace VitrivrVR.Input.Text
       DresClientManager.LogInteraction("keyboard", $"input {text}", QueryEvent.CategoryEnum.TEXT);
     }
 
+    public void InputWord(string text)
+    {
+      TextInputManager.InputWord(text);
+      DresClientManager.LogInteraction("keyboard", $"input word {text}", QueryEvent.CategoryEnum.TEXT);
+    }
+
     public void InputBackspace()
     {
       TextInputManager.InputBackspace();
       DresClientManager.LogInteraction("keyboard", "backspace", QueryEvent.CategoryEnum.TEXT);
+    }
+
+    public void DeleteWord()
+    {
+      TextInputManager.DeleteWord();
+      DresClientManager.LogInteraction("keyboard", "DeleteWord", QueryEvent.CategoryEnum.TEXT);
     }
     
     public void InputReturn()
