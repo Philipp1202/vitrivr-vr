@@ -164,7 +164,6 @@ namespace VitrivrVR.Input.Text
       }
       inputField.ForceLabelUpdate();
       textfieldLastInput[inputField.GetInstanceID()] = new KeyValuePair<string, int>("", 1);
-      Debug.Log("NEEDEDBACKSPACES: " + neededBackspaces);
     }
 
     /// <summary>
